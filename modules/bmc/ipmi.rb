@@ -7,15 +7,6 @@ module Proxy
       include Proxy::Log
       attr_accessor :logger, :log_level
 
-      # set the log level of rubyipmi, set to 0 or Logger::DEBUG for usablable output
-      def self.log_level=(log_level)
-        Rubyipmi.log_level = log_level
-      end
-
-      def self.log_level
-        Rubyipmi.logger.level
-      end
-
       def self.logger
         Rubyipmi.logger
       end
@@ -27,19 +18,19 @@ module Proxy
 
       def self.installed?(provider)
         # check with the lib to see if at least one provider is installed
-        if provider
+        begin
           Rubyipmi.is_provider_installed?(provider)
-        else
-          Rubyipmi.provider_installed?
+        rescue
+          false
         end
       end
 
-      def self.providers_installed?
-        return Rubyipmi.providers_installed?
+      def self.providers_installed
+        Rubyipmi.providers_installed?
       end
 
       def self.providers
-        return Rubyipmi.providers
+        Rubyipmi.providers
       end
 
       # Turn the ipmi device off, if its already off then nothing will happen
